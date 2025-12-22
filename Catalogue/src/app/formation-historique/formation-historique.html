@@ -1,0 +1,214 @@
+<div class="container">
+
+  <div class="header">
+    <h2>Historique des formations</h2>
+    <div class="filters">
+      <button 
+        [class.active]="selectedEtat === 'en_attente'" 
+        (click)="changeEtat('en_attente')">En attente</button>
+      <button 
+        [class.active]="selectedEtat === 'validee'" 
+        (click)="changeEtat('validee')">Validées</button>
+      <button 
+        [class.active]="selectedEtat === 'refusee'" 
+        (click)="changeEtat('refusee')">Refusées</button>
+    </div>
+  </div>
+
+ 
+  <div *ngIf="!loading && formations.length === 0" class="no-data">
+    Aucune formation trouvée
+  </div>
+
+  <div class="table-wrapper" *ngIf="!loading && formations.length > 0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Intitulé</th>
+          <th>Axe</th>
+          <th>Niveau</th>
+          <th>Population</th>
+          <th>Type</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of formations; trackBy: trackFormation" (click)="openDetailModal(f)">
+          <td>{{ f.intitule }}</td>
+          <td>{{ f.axe }}</td>
+          <td><span class="badge">{{ f.niveau }}</span></td>
+          <td>{{ f.population || 'Non spécifié' }}</td>
+          <td>{{ f.interne_externe || 'Non défini' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="f.etat">{{ f.etat }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div *ngIf="detailModalOpen && selectedFormation" class="modal-backdrop" (click)="closeDetailModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-header-content">
+        <h2>Détails de la formation</h2>
+        <span class="status-badge" [ngClass]="selectedFormation.etat">{{ selectedFormation.etat }}</span>
+      </div>
+      <button (click)="closeDetailModal()">✕</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="info-section">
+        <h3> Informations générales</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Intitulé</strong>
+            <span>{{ selectedFormation.intitule }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Axe</strong>
+            <span>{{ selectedFormation.axe }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Niveau</strong>
+            <span class="badge">{{ selectedFormation.niveau }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Population</strong>
+            <span>{{ selectedFormation.population || 'Non spécifié' }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Type</strong>
+            <span>{{ selectedFormation.interne_externe || 'Non défini' }}</span>
+          </div>
+          <div class="info-item" *ngIf="selectedFormation.duree">
+            <strong>Durée</strong>
+            <span>{{ selectedFormation.duree }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" *ngIf="selectedFormation.description">
+        <h3> Description</h3>
+        <p>{{ selectedFormation.description }}</p>
+      </div>
+
+      <div class="info-section" *ngIf="selectedFormation.objectifs?.length">
+        <h3> Objectifs pédagogiques</h3>
+        <ul>
+          <li *ngFor="let o of selectedFormation.objectifs">{{ o }}</li>
+        </ul>
+      </div>
+
+      <div class="info-section" *ngIf="selectedFormation.competences?.length">
+        <h3> Compétences visées</h3>
+        <ul>
+          <li *ngFor="let c of selectedFormation.competences">{{ c }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="modal-actions">
+      <button class="btn btn-update" (click)="openUpdateModal()">
+        ✏️ Modifier
+      </button>
+      <button class="btn btn-delete" (click)="openDeleteModal()">
+        🗑️ Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<div *ngIf="updateModalOpen && selectedFormation" class="modal-backdrop" (click)="closeUpdateModal()">
+  <div class="update-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Modifier la formation</h2>
+      <button (click)="closeUpdateModal()">✕</button>
+    </div>
+
+    <div class="modal-content">
+      <form>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Intitulé</label>
+            <input type="text" [(ngModel)]="selectedFormation.intitule" name="intitule" />
+          </div>
+          <div class="form-group">
+            <label>Axe</label>
+            <input type="text" [(ngModel)]="selectedFormation.axe" name="axe" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Niveau</label>
+            <select [(ngModel)]="selectedFormation.niveau" name="niveau">
+              <option value="Débutant">Débutant</option>
+              <option value="Intermédiaire">Intermédiaire</option>
+              <option value="Avancé">Avancé</option>
+              <option value="Expert">Expert</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Population</label>
+            <input type="text" [(ngModel)]="selectedFormation.population" name="population" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Type</label>
+            <select [(ngModel)]="selectedFormation.interne_externe" name="interne_externe">
+              <option value="Interne">Interne</option>
+              <option value="Externe">Externe</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Durée</label>
+            <input type="text" [(ngModel)]="selectedFormation.duree" name="duree" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="selectedFormation.description" name="description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Prérequis</label>
+          <textarea [(ngModel)]="selectedFormation.prerequis" name="prerequis"></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-cancel" (click)="closeUpdateModal()">
+        Annuler
+      </button>
+      <button class="btn btn-update" (click)="confirmUpdate()">
+         Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="deleteModalOpen" class="modal-backdrop" (click)="closeDeleteModal()">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <div class="confirm-modal-header">
+      <span class="confirm-icon">⚠️</span>
+      <h3>Confirmer la suppression</h3>
+    </div>
+    <div class="confirm-modal-body">
+      Êtes-vous sûr de vouloir supprimer cette formation ? Cette action est irréversible.
+    </div>
+    <div class="confirm-modal-actions">
+      <button class="btn btn-cancel" (click)="closeDeleteModal()">Annuler</button>
+      <button class="btn btn-confirm" (click)="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>

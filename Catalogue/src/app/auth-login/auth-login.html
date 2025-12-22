@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+
+</head>
+<body>
+<button
+  type="button"
+  routerLink="/catalogue"
+  class="icon-button"
+  aria-label="Login"
+>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+  >
+    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+    <polyline points="10 17 15 12 10 7"/>
+    <line x1="15" y1="12" x2="3" y2="12"/>
+  </svg>
+</button>
+
+
+  <div class="body">
+  <!-- auth-login.html -->
+<div class="wrapper">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Login</h2>
+    <div class="input-field">
+      <input type="text" formControlName="email" required>
+      <label>Enter your email</label>
+    </div>
+    <div class="input-field">
+      <input type="password" formControlName="password" required>
+      <label>Enter your password</label>
+    </div>
+    <!-- <div class="forget">
+      <label for="remember">
+        <input type="checkbox" id="remember" formControlName="remember">
+        <p>Remember me</p>
+      </label> -->
+      <!-- <a href="#">Forgot password?</a> -->
+    <!-- </div> -->
+    <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+    <button type="submit">Log In</button>
+    <div class="register">
+      <!-- <p>Don't have an account? <a href="#">Register</a></p> -->
+    </div>
+  </form>
+</div>
+</div>
+</body>
+</html>

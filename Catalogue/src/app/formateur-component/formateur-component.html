@@ -1,0 +1,241 @@
+<div class="background-shapes">
+  <div class="shape shape1"></div>
+  <div class="shape shape2"></div>
+  <div class="shape shape3"></div>
+</div>
+
+<div class="container">
+  <div class="form-card">
+    <form (ngSubmit)="saveFormation()" #form="ngForm">
+
+      <!-- ================= INFORMATIONS GÉNÉRALES ================= -->
+      <div class="form-section">
+        <h2 class="section-title">Informations Générales</h2>
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Intitulé de la formation *</label>
+            <input
+              type="text"
+              name="intitule"
+              [(ngModel)]="newFormation.intitule"
+              placeholder="Ex: Formation Angular avancé"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Population cible *</label>
+            <input
+              type="text"
+              name="population"
+              [(ngModel)]="newFormation.population"
+              placeholder="Ex: Développeurs, Consultants..."
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-grid three-cols">
+          <div class="form-group">
+            <label>Axe *</label>
+            <select name="axe" [(ngModel)]="newFormation.axe" required>
+              <option value="" disabled>Sélectionnez...</option>
+              <option value="Technique">Technique</option>
+              <option value="Fonctionnelle">Fonctionnelle</option>
+              <option value="Métier">Métier</option>
+              <option value="Onboarding">Onboarding</option>
+              <option value="Solutions">Solutions</option>
+              <option value="Linguistique">Linguistique</option>
+              <option value="Transversale">Transversale</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Niveau *</label>
+            <select name="niveau" [(ngModel)]="newFormation.niveau" required>
+              <option value="débutant">Débutant</option>
+              <option value="intermédiaire">Intermédiaire</option>
+              <option value="avancé">Avancé</option>
+              <option value="senior">Senior</option>
+              <option value="expert">Expert</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Parcours</label>
+            <select name="parcours" [(ngModel)]="newFormation.parcours">
+              <option value="">Sélectionnez...</option>
+              <option value="Milles">Milles</option>
+              <option value="Cassiope">Cassiope</option>
+              <option value="E-flo">E-flo</option>
+              <option value="EKIP">EKIP</option>
+              <option value="OnBoarding">OnBoarding</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Durée</label>
+          <input
+            type="text"
+            name="duree"
+            [(ngModel)]="newFormation.duree"
+            placeholder="Ex: 2 jours, 14 heures..."
+          />
+        </div>
+      </div>
+
+      <!-- ================= INTERNE / EXTERNE ================= -->
+      <div class="form-section">
+        <h2 class="section-title">Type de Formation</h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Interne  *</label>
+            <select
+              name="interne_externe"
+              [(ngModel)]="newFormation.interne_externe"
+              (ngModelChange)="onInterneExterneChange()"
+              required
+            >
+              <option value="interne">Interne</option>
+            </select>
+          </div>
+
+          <!-- INTERNE - Show formateur selector -->
+          <div
+            class="form-group"
+            *ngIf="newFormation.interne_externe === 'interne'"
+          >
+            <label>Formateur interne *</label>
+          <select [(ngModel)]="newFormation.id_formateur" name="id_formateur">
+            <option *ngFor="let f of formateurs" [value]="f.id_user">
+              {{ f.nom }} {{ f.prenom }}
+            </option>
+          </select>
+          </div>
+
+          <!-- EXTERNE - Show prestataire input -->
+          <div
+            class="form-group"
+            *ngIf="newFormation.interne_externe === 'externe'"
+          >
+            <label>Prestataire *</label>
+            <input
+              type="text"
+              name="prestataire"
+              [(ngModel)]="newFormation.prestataire"
+              placeholder="Nom du prestataire"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= OBJECTIFS ================= -->
+      <div class="form-section">
+        <h2 class="section-title">Objectifs *</h2>
+
+        <div
+          class="form-group-with-remove"
+          *ngFor="let obj of newFormation.objectifs; let i = index"
+        >
+          <input
+            type="text"
+            [(ngModel)]="newFormation.objectifs[i]"
+            [name]="'objectif_' + i"
+            placeholder="Saisir un objectif"
+            required
+          />
+          <button
+            type="button"
+            class="btn-remove"
+            *ngIf="newFormation.objectifs.length > 1"
+            (click)="removeObjectif(i)"
+            title="Supprimer cet objectif"
+          >
+            ✕
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="btn-add-small"
+          (click)="addObjectif()"
+        >
+          + Ajouter un objectif
+        </button>
+      </div>
+
+      <!-- ================= COMPÉTENCES ================= -->
+      <div class="form-section">
+        <h2 class="section-title">Compétences *</h2>
+
+        <div
+          class="form-group-with-remove"
+          *ngFor="let comp of newFormation.competences; let i = index"
+        >
+          <input
+            type="text"
+            [(ngModel)]="newFormation.competences[i]"
+            [name]="'competence_' + i"
+            placeholder="Saisir une compétence"
+            required
+          />
+          <button
+            type="button"
+            class="btn-remove"
+            *ngIf="newFormation.competences.length > 1"
+            (click)="removeCompetence(i)"
+            title="Supprimer cette compétence"
+          >
+            ✕
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="btn-add-small"
+          (click)="addCompetence()"
+        >
+          + Ajouter une compétence
+        </button>
+      </div>
+
+      <!-- ================= PRÉREQUIS ================= -->
+      <div class="form-section">
+        <div class="form-group full-width">
+          <label>Prérequis *</label>
+          <textarea
+            name="prerequis"
+            [(ngModel)]="newFormation.prerequis"
+            placeholder="Décrivez les prérequis nécessaires pour cette formation..."
+            rows="4"
+            required
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ================= ACTIONS ================= -->
+      <div class="actions-bar">
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="resetForm()"
+        >
+          <span>Réinitialiser</span>
+        </button>
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="form.invalid"
+        >
+          <span>Ajouter la formation</span>
+          <span>✓</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

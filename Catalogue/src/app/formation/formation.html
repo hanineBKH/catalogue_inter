@@ -1,0 +1,250 @@
+<div class="container">
+
+  <div class="header">
+    <h2>Gestion des Formations</h2>
+    <button class="btn-add" (click)="openModal()">
+      <span>+</span> Ajouter une formation
+    </button>
+  </div>
+
+  <!-- TABLEAU FORMATIONS -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Intitulé</th>
+        <th>Axe</th>
+      
+        <th>Niveau</th>
+        <th>Parcours</th>
+        <th>Objectifs</th>
+        <th>Compétences</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of formations; let i = index">
+        <td>{{ f.intitule }}</td>
+        <td>{{ f.axe }}</td>
+      
+        <td>{{ f.niveau }}</td>
+        <td>{{ f.parcours }}</td>
+        <td>{{f.objectifs }}</td>
+        <td>{{ f.competences }}</td>
+        <td class="actions">
+          <button class="icon edit" (click)="openEditModal(f)">✏️</button>
+          <button class="icon delete" (click)="delete(i)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================= MODAL EDIT ================= -->
+<div class="modal-backdrop" *ngIf="editModalOpen && editFormation">
+  <div class="modal">
+    <h2>Modifier une formation</h2>
+    <form (ngSubmit)="updateFormation()" #editForm="ngForm" class="form-grid">
+
+      <!-- COLONNE GAUCHE -->
+      <div class="col">
+        <label>Niveau :</label>
+        <select [(ngModel)]="editFormation.niveau" name="edit_niveau" required>
+          <option value="débutant">Débutant</option>
+          <option value="intermédiaire">Intermédiaire</option>
+          <option value="avancé">Avancé</option>
+          <option value="senior">Senior</option>
+          <option value="expert">Expert</option>
+        </select>
+
+        <label>Type :</label>
+        <input type="text" [(ngModel)]="editFormation.type" name="edit_type" required>
+
+        <label>Intitulé :</label>
+        <input type="text" [(ngModel)]="editFormation.intitule" name="edit_intitule" required>
+
+        <label>Population :</label>
+        <input type="text" [(ngModel)]="editFormation.population" name="edit_population">
+
+        <label>Axe :</label>
+        <select [(ngModel)]="editFormation.axe" name="edit_axe" required>
+          <option value="Technique">Technique</option>
+          <option value="Fonctionnelle">Fonctionnelle</option>
+          <option value="Métier">Métier</option>
+          <option value="Onboarding">Onboarding</option>
+          <option value="Solutions">Solutions</option>
+          <option value="Linguistique">Linguistique</option>
+           <option value="Transversale">Transversale</option>
+        </select>
+
+        <label>Interne / Externe :</label>
+        <select [(ngModel)]="editFormation.interne_externe" name="edit_interne_externe">
+          <option value="interne">Interne</option>
+          <option value="externe">Externe</option>
+        </select>
+
+        <!-- EXTERNE -->
+        <div *ngIf="editFormation.interne_externe === 'externe'">
+          <label>Prestataire :</label>
+          <input type="text" [(ngModel)]="editFormation.prestataire" name="edit_prestataire">
+        </div>
+
+        <!-- INTERNE -->
+        <div *ngIf="editFormation.interne_externe === 'interne'">
+           <!-- INTERNE -->
+          <label>Formateur interne :</label>
+          <select [(ngModel)]="editFormation.id_formateur" name="edit_id_formateur">
+         <option *ngFor="let f of formateurs" [value]="f.id_user">
+              {{ f.nom }} {{ f.prenom }}
+            </option>
+          </select>
+        </div>
+
+        <label>Parcours :</label>
+        <select [(ngModel)]="editFormation.parcours" name="edit_parcours" required>
+          <option value="Milles">Milles</option>
+          <option value="Cassiope">Cassiope</option>
+          <option value="Eflou">E-flo</option>
+            <option value="EKIP">EKIP</option>
+              <option value="OnBording">OnBording</option>
+        </select>
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <div class="col">
+        <label>Durée :</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="editDureeNumber" name="edit_dureeNumber" min="1" required>
+          <select [(ngModel)]="editDureeUnit" name="edit_dureeUnit" required>
+            <option value="jours">Jours</option>
+            <option value="heures">Heures</option>
+          </select>
+        </div>
+
+        <label>Prérequis :</label>
+        <textarea [(ngModel)]="editFormation.prerequis" name="edit_prerequis"></textarea>
+
+        <label>Objectifs :</label>
+        <div *ngFor="let obj of editObjectifsInput; let i = index" class="row">
+          <input type="text" [(ngModel)]="editObjectifsInput[i]" [name]="'edit_objectif' + i">
+        </div>
+        <button type="button" class="btn-add-small" (click)="addEditObjectifInput()">+ Ajouter un objectif</button>
+
+        <label>Compétences :</label>
+        <div *ngFor="let comp of editCompetencesInput; let i = index" class="row">
+          <input type="text" [(ngModel)]="editCompetencesInput[i]" [name]="'edit_competence' + i">
+        </div>
+        <button type="button" class="btn-add-small" (click)="addEditCompetenceInput()">+ Ajouter une compétence</button>
+
+        <div class="modal-actions full-width">
+          <button type="submit" class="btn-save" >Mettre à jour</button>
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">Annuler</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL AJOUT ================= -->
+<div class="modal-backdrop" *ngIf="modalOpen">
+  <div class="modal">
+    <h2>Ajouter une formation</h2>
+    <form (ngSubmit)="saveFormation()" #form="ngForm" class="form-grid">
+
+      <!-- COLONNE GAUCHE -->
+      <div class="col">
+        <label>Niveau :</label>
+        <select [(ngModel)]="newFormation.niveau" name="niveau" required>
+          <option value="débutant">Débutant</option>
+          <option value="intermédiaire">Intermédiaire</option>
+          <option value="avancé">Avancé</option>
+          <option value="senior">Senior</option>
+          <option value="expert">Expert</option>
+        </select>
+
+        <label>Type :</label>
+        <input type="text" [(ngModel)]="newFormation.type" name="type" required>
+
+        <label>Intitulé :</label>
+        <input type="text" [(ngModel)]="newFormation.intitule" name="intitule" required>
+
+        <label>Population :</label>
+        <input type="text" [(ngModel)]="newFormation.population" name="population">
+
+        <label>Axe :</label>
+        <select [(ngModel)]="newFormation.axe" name="axe" required>
+          <option value="Technique">Technique</option>
+          <option value="Fonctionnelle">Fonctionnelle</option>
+          <option value="Métier">Métier</option>
+          <option value="Onboarding">Onboarding</option>
+          <option value="Solutions">Solutions</option>
+          <option value="Linguistique">Linguistique</option>
+             <option value="transversale">Transversale</option>
+          
+        </select>
+
+        <label>Interne / Externe :</label>
+        <select [(ngModel)]="newFormation.interne_externe" name="interne_externe">
+          <option value="interne">Interne</option>
+          <option value="externe">Externe</option>
+        </select>
+
+        <div *ngIf="newFormation.interne_externe === 'externe'">
+          <label>Prestataire :</label>
+          <input type="text" [(ngModel)]="newFormation.prestataire" name="prestataire" placeholder="Nom du prestataire">
+        </div>
+
+        <div *ngIf="newFormation.interne_externe === 'interne'">
+          <label>Formateur interne :</label>
+          <select [(ngModel)]="newFormation.id_formateur" name="id_formateur">
+            <option *ngFor="let f of formateurs" [value]="f.id_user">
+              {{ f.nom }} {{ f.prenom }}
+            </option>
+          </select>
+        </div>
+
+        <label>Parcours :</label>
+        <select [(ngModel)]="newFormation.parcours" name="parcours" required>
+          <option value="Milles">Milles</option>
+          <option value="Cassiope">Cassiope</option>
+          <option value="Eflou">E-flo</option>
+            <option value="Ekip">EKIP</option>
+              <option value="OnBording">OnBording</option>
+        </select>
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <div class="col">
+        <label>Durée :</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="dureeNumber" name="dureeNumber" min="1" placeholder="Ex: 4" required>
+          <select [(ngModel)]="dureeUnit" name="dureeUnit" required>
+            <option value="jours">Jours</option>
+            <option value="heures">Heures</option>
+          </select>
+        </div>
+
+        <label>Prérequis :</label>
+        <textarea [(ngModel)]="newFormation.prerequis" name="prerequis"></textarea>
+
+        <label>Objectifs :</label>
+        <div *ngFor="let obj of objectifsInput; let i = index" class="row">
+          <input type="text" [(ngModel)]="objectifsInput[i]" [name]="'objectif' + i" placeholder="Saisir un objectif...">
+        </div>
+        <button type="button" class="btn-add-small" (click)="addObjectifInput()">+ Ajouter un objectif</button>
+
+        <label>Compétences :</label>
+        <div *ngFor="let comp of competencesInput; let i = index" class="row">
+          <input type="text" [(ngModel)]="competencesInput[i]" [name]="'competence' + i" placeholder="Saisir une compétence...">
+        </div>
+        <button type="button" class="btn-add-small" (click)="addCompetenceInput()">+ Ajouter une compétence</button>
+
+        <div class="modal-actions full-width">
+          <button type="submit" class="btn-save">Enregistrer</button>
+          <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

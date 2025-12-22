@@ -1,0 +1,259 @@
+/* ----------------------------- */
+/*     CONTENEUR GLOBAL         */
+/* ----------------------------- */
+.container {
+  padding: 30px;
+  max-width: 1100px;
+  margin: auto;
+  color: #3C3C3C;
+  font-family: "Inter", sans-serif;
+}
+
+/* ----------------------------- */
+/*            HEADER            */
+/* ----------------------------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #3C3C3C;
+}
+
+/* ----------------------------- */
+/*       BOUTON AJOUTER         */
+/* ----------------------------- */
+.btn-add {
+  background-color: #8AA73D; /* vert Teamwill */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #6E872F; /* vert plus foncé */
+}
+
+/* ----------------------------- */
+/*            TABLEAU            */
+/* ----------------------------- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #DADADA;
+}
+
+.table thead {
+  background: #3C3C3C; /* gris anthracite corporate */
+  color: white;
+}
+
+.table th,
+.table td {
+  padding: 16px;
+  text-align: left;
+  font-size: 15px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #E3E3E3;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ----------------------------- */
+/*            BADGES             */
+/* ----------------------------- */
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+/* Couleurs badges */
+.badge.avancé {
+  background-color: #C65B5B; /* rouge élégant */
+  color: white;
+}
+
+.badge.intermédiaire {
+  background-color: #E8D469; /* jaune doux */
+  color: #4A4A00;
+}
+
+.badge.débutant {
+  background-color: #8AA73D; /* vert Teamwill */
+  color: white;
+}
+
+/* ----------------------------- */
+/*            ACTIONS            */
+/* ----------------------------- */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  border: none;
+  background: #EFEFEF;
+  border-radius: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.icon.edit:hover {
+  background: #D5E4B6; /* vert pastel Teamwill */
+}
+
+.icon.delete:hover {
+  background: #F5C3C3; /* rouge pastel */
+}
+
+/* ----------------------------- */
+/*         MODAL BACKDROP        */
+/* ----------------------------- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* ----------------------------- */
+/*             MODAL             */
+/* ----------------------------- */
+.modal {
+  width: 90%;
+  max-width: 1000px;  /* modal plus large */
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  animation: show 0.25s ease-out;
+  max-height: 90vh;
+  overflow-y: auto; /* scroll si contenu trop grand */
+}
+
+@keyframes show {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Titre modal */
+.modal h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* FORM GRID: 2 colonnes */
+.form-grid {
+  display: flex;
+  gap: 30px;
+}
+
+.form-grid .col {
+  flex: 1; /* chaque colonne prend la moitié */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Inputs et textarea */
+.modal input,
+.modal select,
+.modal textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Boutons Ajouter objectif/compétence */
+.btn-add-small {
+  margin-top: 5px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 6px;
+  background-color: #8AA73D;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-add-small:hover {
+  background-color: #6E872F;
+}
+
+/* Boutons enregistrer/annuler */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-save {
+  padding: 8px 14px;
+  background: #6E872F;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  padding: 8px 14px;
+  background: #777;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Ligne input objectif/compétence */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* Scroll pour table ou modal si nécessaire */
+.table-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+

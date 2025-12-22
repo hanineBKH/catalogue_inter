@@ -1,0 +1,118 @@
+<div class="container">
+
+  <div class="header">
+    <h2>Gestion des Utilisateurs</h2>
+    <button class="btn-add" (click)="openModal()">
+      <span>+</span> Ajouter un utilisateur
+    </button>
+  </div>
+
+ 
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let u of users; let i = index">
+        <td>{{ u.nom }}</td>
+        <td>{{ u.prenom }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.role }}</td>
+
+        <td class="actions">
+          <button class="icon edit" (click)="openEditModal(u)">✏️</button>
+          <button class="icon delete" (click)="delete(i)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================= MODAL EDIT ================= -->
+<div class="modal-backdrop" *ngIf="editModalOpen && editUser">
+  <div class="modal">
+    <h2>Modifier un utilisateur</h2>
+
+    <form (ngSubmit)="updateUser()" #editForm="ngForm" class="form-grid">
+
+      <div class="col">
+
+        <label>Nom :</label>
+        <input type="text" [(ngModel)]="editUser.nom" name="edit_nom" required>
+
+        <label>Prénom :</label>
+        <input type="text" [(ngModel)]="editUser.prenom" name="edit_prenom" required>
+
+        <label>Email :</label>
+        <input type="email" [(ngModel)]="editUser.email" name="edit_email" required>
+
+        <label>Rôle :</label>
+        <select [(ngModel)]="editUser.id_role" name="edit_role" required>
+          <option *ngFor="let r of roles" [value]="r.id_role">
+            {{ r.libelle }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col">
+
+        <label>Mot de passe (optionnel) :</label>
+        <input type="password" [(ngModel)]="editUser.password" name="edit_password">
+
+        <div class="modal-actions full-width">
+          <button type="submit" class="btn-save">Mettre à jour</button>
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">Annuler</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL ADD ================= -->
+<div class="modal-backdrop" *ngIf="modalOpen">
+  <div class="modal">
+    <h2>Ajouter un utilisateur</h2>
+
+    <form (ngSubmit)="saveUser()" #form="ngForm" class="form-grid">
+
+      <div class="col">
+
+        <label>Nom :</label>
+        <input type="text" [(ngModel)]="newUser.nom" name="nom" required>
+
+        <label>Prénom :</label>
+        <input type="text" [(ngModel)]="newUser.prenom" name="prenom" required>
+
+        <label>Email :</label>
+        <input type="email" [(ngModel)]="newUser.email" name="email" required>
+
+        <label>Rôle :</label>
+        <select [(ngModel)]="newUser.id_role" name="role" required>
+          <option *ngFor="let r of roles" [value]="r.id_role">
+            {{ r.libelle }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col">
+
+        <label>Mot de passe :</label>
+        <input type="password" [(ngModel)]="newUser.password" name="password" required>
+
+        <div class="modal-actions full-width">
+          <button type="submit" class="btn-save">Enregistrer</button>
+          <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

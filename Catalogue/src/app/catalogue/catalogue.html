@@ -1,0 +1,441 @@
+<body>
+
+
+  <!-- ================= COVER PAGE ================= -->
+ 
+    <!-- Animated Background -->
+    <div class="background-animation"></div>
+     <div *ngIf="showCover" class="cover-page">
+
+  
+   
+    
+    <!-- Floating Images -->
+    <div class="floating-images">
+      <img src="assets/Media1.jpg" alt="Formation 1" class="float-img img-1">
+      <img src="assets/Media2.jpg" alt="Formation 2" class="float-img img-2">
+      <img src="assets/Media3.jpg" class="float-img img-3">
+      <img src="assets/Media4.jpg" alt="Formation 4" class="float-img img-4">
+      <img src="assets/Media5.jpg"  alt="Formation 5" class="float-img img-5">
+
+<img src="assets/Media6.jpg"   alt="Formation 6"  class="float-img img-6">
+
+<img src="assets/Media7.jpg"   alt="Formation 7"   class="float-img img-7">
+<img src="assets/Media8.jpg"   alt="Formation 7"   class="float-img img-8">
+
+    </div>
+    
+    <!-- Main Content -->
+    <div class="cover-content">
+      <div class="content-wrapper">
+        <!-- <div class="icon-wrapper">
+          <svg class="graduation-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10l-10-5-10 5 10 5 10-5z"/>
+            <path d="M6 12v5c0 1.5 4 3 6 3s6-1.5 6-3v-5"/>
+          </svg>
+        </div> -->
+        
+        <h1 class="title">Catalogue de Formations</h1>
+        <div class="video-box">
+  <video
+    class="intro-video"
+    autoplay
+    muted
+    loop
+    playsinline>
+    <source src="assets/TeamwillV.mp4" type="video/mp4">
+   
+  </video>
+</div>
+        <p class="subtitle" >Bienvenue sur la planète de l’apprentissage continu </p>
+        
+        <div class="features">
+          <span class="feature-tag"> Thématiques Inspirantes </span>
+          <span class="feature-tag"> Formats Variés</span>
+          <span class="feature-tag"> Compétences clés au rendez-vous</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide-up Button -->
+    <div class="button-container">
+      <button (click)="startCatalogue()" class="start-button">
+        <span>Commencer </span>
+        <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    <a routerLink="/login" class="login-link" routerLinkActive="active">
+    Se connecter
+  </a>
+
+    </div>
+    
+  </div>
+  <!-- ================= END COVER PAGE ================= -->
+
+  <!-- ================= CATALOGUE CONTENT ================= -->
+  <div *ngIf="showCatalogue"  class="catalogue-container"> 
+    <!-- Sidebar - Sommaire --> 
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">Catalogue de Formations</h1>
+        <p class="sidebar-subtitle">Page {{ currentPage + 1 }} / {{ formations.length }}</p>
+
+        <!-- Hidden Google Translate element -->
+        <!-- <div id="google_translate_element" style="display:none;"></div> -->
+
+        <!-- Buttons -->
+        <!-- <div class="translate-buttons">
+          <button (click)="translateTo('en')" [disabled]="!translationReady">English</button>
+          <button (click)="translateTo('fr')" [disabled]="!translationReady">Français</button>
+        </div> -->
+
+        <div class="view-toggle">
+          <button 
+            class="view-button" 
+            [ngClass]="{'active': currentView === 'axe'}"
+            (click)="currentView = 'axe'">
+            Formations
+          </button>
+
+          <button 
+            class="view-button" 
+            [ngClass]="{'active': currentView === 'parcours'}"
+            (click)="currentView = 'parcours'">
+            Parcours
+          </button>
+        </div>
+      </div>
+    
+      <div class="sidebar-content">
+        <h3 class="sommaire-title">Sommaire</h3>
+
+        <!-- ================= VIEW BY AXE ================= -->
+        <div *ngIf="currentView === 'axe'" class="view-content">
+          <ng-container *ngFor="let axeGroup of groupedFormations; let i = index">
+            
+            <div class="axe-section" [class.collapsed]="collapsedAxes[i]">
+              <div class="axe-header" (click)="toggleAxe(i)">
+                <div class="axe-header-content">
+                  <div class="axe-name">{{ axeGroup.axe }}</div>
+                </div>
+                <svg class="axe-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+
+              <div class="axe-content">
+                <ng-container *ngFor="let typeGroup of axeGroup.types">
+                  <div class="type-section">
+                    <!-- <div class="type-header">
+                      <div class="type-name">{{ typeGroup.type }}</div>
+                    </div> -->
+
+                    <ng-container *ngFor="let statusGroup of typeGroup.interneExterne">
+                      <div class="status-section">
+                        <div class="status-header">
+                          <div class="type-name">{{ statusGroup.status | titlecase }}</div>
+                        </div>
+                        <div class="formation-list">
+                          <button *ngFor="let formation of statusGroup.formations"
+                            class="formation-item"
+                           [class.active]="isCurrentPageFormation(formation)"
+(click)="goToPage(getVisibleFormations().indexOf(formation))"
+>
+
+                            <span class="formation-title">
+                              {{ formation.intitule }}
+                            </span>
+
+                            <div *ngIf="isCurrentPage(getFormationIndex(formation))"
+                              class="active-indicator"></div>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+          </ng-container>
+        </div>
+
+        <!-- ================= VIEW BY PARCOURS ================= -->
+        <div *ngIf="currentView === 'parcours'" class="view-content">
+          <div *ngFor="let parcours of groupedParcours" class="parcours-section">
+
+            <div class="parcours-header">
+              <div class="parcours-name">{{ parcours.name }}</div>
+              <span class="parcours-count">{{ parcours.count }} formations</span>
+            </div>
+
+            <div class="parcours-content">
+              <ng-container *ngFor="let axeGroup of parcours.axes; let a = index">
+
+                <div class="axe-section"
+                  [class.collapsed]="collapsedParcoursAxes[parcours.name]?.[a]">
+
+                  <!-- Axe header (IDENTICAL to axe view) -->
+                  <div class="axe-header"
+                    (click)="toggleParcoursAxe(parcours.name, a)">
+                    <div class="axe-header-content">
+                      <div class="axe-name">{{ axeGroup.axe }}</div>
+                    </div>
+
+                    <svg class="axe-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
+
+                  <!-- Axe content -->
+                  <div class="axe-content">
+                    <ng-container *ngFor="let typeGroup of axeGroup.types">
+
+                      <!-- Type -->
+                      <div class="type-section">
+                        <!-- <div class="type-header">
+                          <div class="type-name">{{ typeGroup.type }}</div>
+                        </div> -->
+
+                        <ng-container *ngFor="let statusGroup of typeGroup.interneExterne">
+
+                          <!-- Status -->
+                          <div class="status-section">
+                            <div class="status-header">
+                              <div class="type-name">
+                                {{ statusGroup.status | titlecase }}
+                              </div>
+                            </div>
+
+                            <!-- Formations -->
+                            <div class="formation-list">
+                              <button *ngFor="let formation of statusGroup.formations"
+                                class="formation-item"
+                               [class.active]="isCurrentPageFormation(formation)"
+(click)="goToPage(getVisibleFormations().indexOf(formation))"
+>
+
+                                <span class="formation-title">
+                                  {{ formation.intitule }}
+                                </span>
+
+                                <div *ngIf="isCurrentPage(getFormationIndex(formation))"
+                                  class="active-indicator"></div>
+                              </button>
+                            </div>
+
+                          </div>
+                        </ng-container>
+                      </div>
+
+                    </ng-container>
+                  </div>
+                </div>
+
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Main Content - Book Page --> 
+    <div class="main-content">
+      <div class="book-container">
+        
+        <div class="book-page" 
+          *ngIf="currentFormation"
+          [class.page-flip-out]="pageFlipDirection === 'forward'"
+          [class.page-flip-back-out]="pageFlipDirection === 'backward'">
+        
+          <div class="page-content">
+            <img 
+              src="https://universitesesame.com/wp-content/uploads/2022/09/logo-teamwill.png"
+              alt="TeamWill Logo"
+              style="width:170px; height:auto; float:right; margin:5px;"
+            >
+            
+            <!-- Page Header -->
+            <div class="page-header">
+              <span class="category-badge">{{ currentFormation.axe_code }}</span>
+              <h2 class="formation-main-title">{{ currentFormation.intitule }}</h2>
+              <p class="formation-description">{{ currentFormation.duree }}</p>
+            </div>
+
+            <!-- Information Grid -->
+            <div class="info-grid">
+         <div class="info-card">
+  <div class="info-card-header">
+    <span class="info-label" >
+      {{ currentFormation.interne_externe === 'externe' ? 'Prestataire' : 'Formateur' }}
+    </span>
+  </div>
+
+  <p class="info-value">
+    {{
+      currentFormation.interne_externe === 'externe'
+        ? (currentFormation.prestataire || 'N/A')
+        : (currentFormation.formateur || 'N/A')
+    }}
+  </p>
+</div>
+
+
+              <div class="info-card">
+                <div class="info-card-header">
+                  <span class="info-label">Niveau</span>
+                </div>
+                <span [class]="'niveau-badge ' + getNiveauColor(currentFormation.niveau || '')">
+                  {{ currentFormation.niveau || 'N/A' }}
+                </span>
+              </div>
+
+              <div class="info-card">
+                <div class="info-card-header">
+                  <span class="info-label">Population</span>
+                </div>
+                <p class="info-value">{{ currentFormation.population || 'N/A' }}</p>
+              </div>
+            </div>
+
+            <!-- Objectifs -->
+            <div class="section">
+              <h3 class="section-title">
+                <div class="title-bar"></div> Objectifs de la Formation
+              </h3>
+              <ul class="objectifs-list">
+                <li *ngFor="let objectif of currentFormation.objectifs || []; let i = index" class="objectif-item">
+                  <div class="objectif-number">{{ i + 1 }}</div>
+                  <span class="objectif-text">{{ objectif }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Compétences -->
+            <div class="section">
+              <h3 class="section-title">
+                <div class="title-bar competences-bar"></div> Compétences visées
+              </h3>
+              <ul class="competences-list">
+                <li *ngFor="let competence of currentFormation.competences || []" class="competence-item">
+                  {{ competence }}
+                </li>
+              </ul>
+            </div>
+
+            <!-- Prérequis -->
+            <div class="section">
+              <h3 class="section-title">
+                <div class="title-bar prerequis-bar"></div> Prérequis nécessaires
+              </h3>
+              <div class="prerequis-box">
+                <p class="prerequis-text">{{ currentFormation.prerequis }}</p>
+              </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="cta-section">
+ <!-- <button (click)="onInscription()" class="cta-button"> S'inscrire à cette formation </button> -->
+            </div>
+          </div>
+
+          <!-- Page Footer -->
+          <div class="page-footer">Page {{ currentPage + 1 }} / {{ formations.length }}</div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button (click)="prevPage()" [disabled]="!canGoPrevious()"  class="nav-button nav-prev" [class.disabled]="!canGoPrevious()">
+          <svg class="icon-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button (click)="nextPage()" [disabled]="!canGoNext()" class="nav-button nav-next" [class.disabled]="!canGoNext()">
+          <svg class="icon-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+   <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-container">
+      <!-- Close Button -->
+      <button class="close-button" (click)="closePopup()">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Header -->
+      <div class="popup-header"  >
+        <!-- Floating Elements -->
+        <div class="floating-element rocket">🚀</div>
+        <div class="floating-element star1">⭐</div>
+        <div class="floating-element star2">✨</div>
+        <div class="floating-element planet">🌍</div>
+
+        <div class="header-content">
+          <div class="welcome-badge"> Bienvenue chez TeamWill</div>
+          <h1 class="popup-title">
+            Bienvenue sur la planète de<br>
+            <span class="title-highlight">l'apprentissage continu</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="popup-body">
+        <div class="message-section">
+          <p class="message-text">
+            Explorez notre catalogue de formations comme un véritable 
+            <span class="highlight-text">menu à la carte</span> : formats variés, 
+            thématiques inspirantes et compétences clés au rendez-vous.
+          </p>
+          
+          <p class="message-text">
+            Un terrain de jeu pensé pour <span class="highlight-text">apprendre</span>, 
+            <span class="highlight-text">évoluer</span> et relever de nouveaux défis.
+          </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3 class="feature-title">Piochez</h3>
+            <p class="feature-desc">Dans notre catalogue</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3 class="feature-title">Testez</h3>
+            <p class="feature-desc">De nouvelles compétences</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3 class="feature-title">Progressez</h3>
+            <p class="feature-desc">À votre rythme</p>
+          </div>
+        </div>
+
+        <!-- CTA Text -->
+        <p class="cta-text">
+          Construisez le <span class="cta-highlight">parcours qui vous ressemble !</span>
+        </p>
+
+        <!-- Action Button -->
+        <button class="action-button" (click)="closePopup()">
+          <span>Découvrir le catalogue</span>
+          <span class="button-icon">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ================= END CATALOGUE CONTENT ================= -->
+</body>

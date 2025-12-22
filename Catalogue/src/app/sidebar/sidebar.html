@@ -1,0 +1,60 @@
+<aside class="sidebar" [class.closed]="!sidebarOpen">
+ 
+  <!-- Header -->
+  <div class="sidebar-header">
+    <div class="logo-container">
+       <img *ngIf="sidebarOpen"
+       class="logo"
+       src="https://lms.teamwillgroup.com/img/logo.png"
+       alt="Teamwill Logo" />
+ 
+  <!-- Logo compact quand sidebar fermé -->
+  <img *ngIf="!sidebarOpen"
+       class="logo"
+       src="https://www.teamwillgroup.com/wp-content/uploads/2022/09/Image2.png"
+       alt="Small Logo" />
+      <h2 *ngIf="sidebarOpen" class="brand"></h2>
+    </div>
+ 
+<button class="btn-close" (click)="toggle()">
+      <img style="width: 20px;height: 20px;" src="https://th.bing.com/th/id/R.bbf7690673958d2d3e2553210397ea41?rik=cjjS9vY1rHKJsA&pid=ImgRaw&r=0">
+    </button>
+ </div>
+  <nav class="menu">
+ 
+    <a routerLink="/catalogue"  routerLinkActive="active">
+      <i class="icon"><img style="height: 20px; width: 20px;"  src="https://cdn-icons-png.flaticon.com/512/3486/3486568.png"></i>
+      <span *ngIf="sidebarOpen">Catalogue</span>
+    </a>
+ 
+    <a routerLink="/formation"  *ngIf="isAdmin()"  routerLinkActive="active">
+      <i class="icon"><img style="height: 20px; width: 20px;"  src="https://cdn-icons-png.flaticon.com/512/4192/4192781.png"></i>
+      <span *ngIf="sidebarOpen">Formations</span>
+    </a>
+  <a routerLink="/users" *ngIf="isAdmin()" routerLinkActive="active">
+      <i class="icon"><img style="height: 20px; width: 20px;"  src="https://p7.hiclipart.com/preview/442/477/305/computer-icons-user-profile-avatar-profile.jpg"></i>
+      <span *ngIf="sidebarOpen">Utilisateurs</span>
+    </a>
+     <a routerLink="/formateur" *ngIf="isFormateur()" routerLinkActive="active">
+      <i class="icon"><img style="height: 20px; width: 20px;"  src="https://th.bing.com/th/id/OIP.BLAsMSijkDa1DYDnw-_crAHaHa?w=194&h=194&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1"></i>
+      <span *ngIf="sidebarOpen">Formulaire</span>
+    </a>
+       <a routerLink="/historique" *ngIf="isFormateur()" routerLinkActive="active">
+      <i class="icon"><img style="height: 20px; width: 20px;"  src="https://cdn-icons-png.flaticon.com/512/61/61122.png"></i>
+      <span *ngIf="sidebarOpen">Historique</span>
+    </a>
+ 
+ 
+<a (click)="logout()" class="logout-button">
+  <i class="icon">
+    <img style="height: 20px; width: 20px;" src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png">
+  </i>
+  <span *ngIf="sidebarOpen">Déconnexion</span>
+</a>
+
+  
+
+  </nav>
+ 
+</aside>
+ 
