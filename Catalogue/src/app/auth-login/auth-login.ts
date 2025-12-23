@@ -22,10 +22,17 @@ export class AuthLogin {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      remember: [false]
-    });
+  email: [
+    '',
+    [
+      Validators.required,
+      Validators.email,
+      Validators.pattern(/^[a-zA-Z0-9._%+-]+@teamwillgroup\.com$/)
+    ]
+  ],
+  password: ['', Validators.required],
+  remember: [false]
+});
   }
 
 onSubmit() {

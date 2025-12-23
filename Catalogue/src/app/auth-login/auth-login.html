@@ -32,10 +32,28 @@
 <div class="wrapper">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h2>Login</h2>
-    <div class="input-field">
-      <input type="text" formControlName="email" required>
-      <label>Enter your email</label>
-    </div>
+ 
+      <div class="input-field">
+    <input 
+      type="email" 
+      formControlName="email" 
+      required 
+     
+    />
+    <label>Email</label>
+
+    <!-- Error messages -->
+  <small *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['required']" class="error">
+    Email is required
+  </small>
+  <small *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['email']" class="error">
+    Invalid email format
+  </small>
+  <small *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['pattern']" class="error">
+    Only @teamwillgroup.com emails are allowed
+  </small>
+
+  </div>
     <div class="input-field">
       <input type="password" formControlName="password" required>
       <label>Enter your password</label>
